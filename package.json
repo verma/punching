@@ -1,0 +1,11 @@
+{
+	"name": "punching-tests",
+	"description": "Play around with UDP hole punching",
+	"author": "Uday K Verma",
+	"version": "0.0.1",
+	"dependencies": {
+		"lodash": "*",
+		"json-over-tcp": "*",
+		"sigmund": "*"
+	}
+}
