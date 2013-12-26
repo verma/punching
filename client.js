@@ -12,7 +12,7 @@ var go = function() {
 	var setupSignalling = function() {
 		var myId = null;
 
-		var socket = jot.connect(9090, 'localhost', function() {
+		var socket = jot.connect(9090, process.env.PUNCH_HOST || 'localhost', function() {
 			socket.write({ req: 'id' });
 		});
 
@@ -27,9 +27,13 @@ var go = function() {
 			var b = new Buffer(myId);
 
 			s.on('message', function(msg, rinfo) {
-				console.log('dgram, valid:',
-					(rinfo.address === dhost &&
-					 rinfo.port == dport));
+				var valid = (rinfo.address === dhost &&
+					 rinfo.port == dport);
+
+				console.log('dgram, valid:', valid);
+				if (!valid) {
+					console.log('rinfo:', rinfo.address, rinfo.port, 'd:', dhost, dport);
+				}
 			});
 
 			setInterval(function() {
