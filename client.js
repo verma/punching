@@ -25,6 +25,7 @@ var go = function() {
 				return console.log('Cannot start sending dgrams without ID');
 			var s = dgram.createSocket('udp4');
 			var b = new Buffer(myId);
+			var packs = [];
 
 			s.on('message', function(msg, rinfo) {
 				var valid = (rinfo.address === dhost &&
@@ -33,6 +34,18 @@ var go = function() {
 				console.log('dgram, valid:', valid);
 				if (!valid) {
 					console.log('rinfo:', rinfo.address, rinfo.port, 'd:', dhost, dport);
+					if (_.size(packs) === 0 ||
+						sigmund(_.last(packs)) === sigmund({ host: rinfo.address, port: rinfo.port }))
+						packs.push({ host: rinfo.address, port: rinfo.port });
+					else
+						packs.length = 0;
+
+					if (_.size(packs) >= 10) {
+						console.log('Too many packets from invalid source, switching...');
+						var a = _.last(packs);
+						dhost = a.host;
+						dport = a.port;
+					}
 				}
 			});
 
