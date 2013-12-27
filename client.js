@@ -4,7 +4,8 @@
 
 var
 	jot = require('json-over-tcp'),
-	dgram = require('dgram');
+	dgram = require('dgram'),
+	_ = require('lodash');
 
 var go = function() {
 	"use strict";
